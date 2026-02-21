@@ -3,6 +3,7 @@ const { dbConnection } = require("./config/dbConnect");
 const { router } = require("./routes/route");
 const { UserModel } = require("./model/userModel");
 
+
 const app = express();
 app.use(express.json());
 
