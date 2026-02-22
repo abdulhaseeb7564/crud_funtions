@@ -4,7 +4,7 @@ const { DataTypes } = require("sequelize");
 const UserModel = sequelize.define("users", {
   firstName: {
     type: DataTypes.STRING,
-   allowNull: false,
+    allowNull: false,
   },
   lastName: DataTypes.STRING,
 
@@ -22,11 +22,11 @@ const UserModel = sequelize.define("users", {
   },
   age: DataTypes.INTEGER,
 
-  // mobileNumber: {
-  //   type: DataTypes.STRING,
-  //  allowNull: false,
-  //  unique: true
-  // },
+  mobileNumber: {
+    type: DataTypes.STRING,
+   allowNull: false,
+   unique: true
+  },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,

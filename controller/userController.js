@@ -28,8 +28,16 @@ const createUser = async (req, res) => {
       return res.status(900).json({error: "Users Phone is already exist"})
     }
 
-    const user = await UserModel.create(req.body);
+    // const user = await UserModel.create(req.body);
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds)
 
+   const userData = {
+  ...req.body,           // saari fields
+  password: hashedPassword  // password replace
+};
+
+const user = await UserModel.create(userData);
     const token = jwt.sign(
       { id: user.id, email: user.email }, 
       "your_secret_key_123", // Use a long random string in a real project
