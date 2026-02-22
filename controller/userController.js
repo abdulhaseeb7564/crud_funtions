@@ -29,6 +29,7 @@ const createUser = async (req, res) => {
     }
 
     // const user = await UserModel.create(req.body);
+    //hashedPassword  
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds)
 
@@ -135,21 +136,25 @@ const deleteUser = async (req, res) => {
 const loginUsers = async (req, res)=> {
   try {
     const {email, password} = req.body
-
+    console.log("Login Email:", req.body.email);
     const user = await UserModel.findOne({where: {email}})
+    console.log("User Found:", user);
 
     if (!user) {
       return res.status(500).json({error: "Users is not found"})
     }
-  if (user.password !== password) {
-      return res.status(401).json({ error: "Invalid email or password" });
-    }
-      const token = jwt.sign(
-      { id: user.id, email: user.email }, 
-      "your_secret_key_123", 
-      { expiresIn: "1h" }
-    );
+          // Password compare
+const isMatch = await bcrypt.compare(password, user.password);
+if (!isMatch) {
+  return res.status(401).json({ error: "Invalid email or password" });
+}
 
+     // jwt token
+const token = jwt.sign(
+  { id: user.id, email: user.email },
+  "mysecret123", 
+  { expiresIn: "1h" }
+);
     const userResponse = user.toJSON()
     delete userResponse.password
     return res.status(201).json ({
@@ -162,6 +167,7 @@ const loginUsers = async (req, res)=> {
   }
 };
 
+// import our exports
 module.exports = {
   createUser,
   getUser,
