@@ -2,6 +2,7 @@ const { validate } = require("joi"); //  // validate request body using Joi sche
 const { userSchema } = require("../middleware/userValidate");
 const { UserModel } = require("../model/userModel");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
 
 // Create user
 const createUser = async (req, res) => {
@@ -52,6 +53,7 @@ const createUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // Get all users
 const getUser = async (req, res) => {
   try {
@@ -121,10 +123,42 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// login users  
+const loginUsers = async (req, res)=> {
+  try {
+    const {email, password} = req.body
+
+    const user = await UserModel.findOne({where: {email}})
+
+    if (!user) {
+      return res.status(500).json({error: "Users is not found"})
+    }
+  if (user.password !== password) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+      const token = jwt.sign(
+      { id: user.id, email: user.email }, 
+      "your_secret_key_123", 
+      { expiresIn: "1h" }
+    );
+
+    const userResponse = user.toJSON()
+    delete userResponse.password
+    return res.status(201).json ({
+    message: "Users Login successfully",
+    user: userResponse,
+    token
+    })
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createUser,
   getUser,
   getUserById,
   updateUser,
   deleteUser,
+  loginUsers,
 };
