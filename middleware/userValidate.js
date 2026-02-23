@@ -1,5 +1,8 @@
 const Jio = require("joi");
 
+  // userSchema 
+  // Matlab jab bhi koi user data bhejega (signup form ya API request me), 
+  // toh yeh schema check karega ki data valid hai ya nahi
 const userSchema = Jio.object({
   firstName: Jio.string().required(),
   lastName: Jio.string().required(),

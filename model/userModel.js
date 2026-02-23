@@ -1,35 +1,36 @@
-const { sequelize } = require("../config/dbConnect");
-const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/dbConnect"); // DB connection
+const { DataTypes } = require("sequelize"); // Data types
 
+    // User table
 const UserModel = sequelize.define("users", {
   firstName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  lastName: DataTypes.STRING,
+    type: DataTypes.STRING,     // String type
+    allowNull: false,           // Required field
+  }, 
+  lastName: DataTypes.STRING,   // Optional string
 
   email: {
-    type: DataTypes.STRING,
-    unique : true,
-    allowNull: false,
+    type: DataTypes.STRING,    // Email string
+    unique : true,            // Unique value
+    allowNull: false,         // Required field
     validate: {
-    isEmail: true
+    isEmail: true             // Email format
     }
   },
   password:{
-    type : DataTypes.STRING,
-     allowNull: false,
+    type : DataTypes.STRING,    // Password string
+     allowNull: false,          // Required field
   },
-  age: DataTypes.INTEGER,
+  age: DataTypes.INTEGER,      // Integer type
 
   mobileNumber: {
-    type: DataTypes.STRING,
-   allowNull: false,
-   unique: true
+    type: DataTypes.STRING,    // Mobile string
+   allowNull: false,           // Required field
+   unique: true                // Unique value
   },
   isActive: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
+    type: DataTypes.BOOLEAN,    // Boolean type
+    defaultValue: true,         // Default true
   },
 });
 

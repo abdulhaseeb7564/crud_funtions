@@ -12,22 +12,22 @@ const {
 
 } = require("../controller/userController");
 
-// Create user
+      // Create user
 router.post("/add", createUser);
 
-// Get all users
+     // Get all users
 router.get("/getAllUsers", getUser);
 
-// Get user by ID
+    // Get user by ID
 router.get("/getUsersById/:id", getUserById);
 
-// Update user
+    // Update user
 router.put("/update/:id", updateUser);
 
-// Delete user
+   // Delete user
 router.delete("/delete/:id", deleteUser);
 
-// login users 
+   // login users 
 router.post("/loginUsers",loginUsers)
 
 module.exports = {router};

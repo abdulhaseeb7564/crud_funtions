@@ -1,35 +1,34 @@
-const { validate } = require("joi"); //  // validate request body using Joi schema //validate  ya code user ka data check (validate) karta hai
-const { userSchema } = require("../middleware/userValidate");
-const { UserModel } = require("../model/userModel");
-const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
+const { validate } = require("joi");  // Joi validation
+const { userSchema } = require("../middleware/userValidate"); // User schema
+const { UserModel } = require("../model/userModel"); // User model
+const jwt = require("jsonwebtoken"); // JWT auth
+const bcrypt = require('bcrypt'); // Password hashing
 
-// Create user
+            // Create user
 const createUser = async (req, res) => {
   try {
     const { error } = userSchema.validate(req.body);
 
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
-      // Create user in the database
+           // Create user in the database
     }
 
 
-    // email validate code 
+          // email validate code 
     const existUsers = await UserModel.findOne({where: {email : req.body.email}});
     if (existUsers) {
       return res.status (900).json({error: "Users is already exist"});
     }
 
-    // phone number  validate
+           // phone number  validate
     const mobileNumber = await UserModel.findOne({where: {mobileNumber: req.body.mobileNumber}})
 
     if (mobileNumber) {
       return res.status(900).json({error: "Users Phone is already exist"})
     }
 
-    // const user = await UserModel.create(req.body);
-    //hashedPassword  
+             //hashedPassword  
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds)
 
@@ -63,7 +62,7 @@ const user = await UserModel.create(userData);
   }
 };
 
-// Get all users
+          // Get all users
 const getUser = async (req, res) => {
   try {
     const users = await UserModel.findAll();
@@ -74,12 +73,12 @@ const getUser = async (req, res) => {
   }
 };
 
-// Get user by ID
+         // Get user by ID
 const getUserById = async (req, res) => {
   try {
     const users = await UserModel.findByPk(req.params.id);
 
-    // 1. Check if user was found
+     // 1. Check if user was found
     if (!users) {
       return res.status(404).json({
        message:"User is not fond" 
@@ -94,7 +93,7 @@ const getUserById = async (req, res) => {
   }
 };
 
-// Update user
+        // Update user
 const updateUser = async (req, res) => {
   try {
     const { error } = userSchema.validate(req.body);
@@ -116,7 +115,7 @@ const updateUser = async (req, res) => {
 };
 
 
-// Delete user
+         // Delete user
 const deleteUser = async (req, res) => {
   try {
     const user = await UserModel.findByPk(req.params.id)
@@ -132,7 +131,7 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// login users  
+         // login users  
 const loginUsers = async (req, res)=> {
   try {
     const {email, password} = req.body
@@ -143,7 +142,8 @@ const loginUsers = async (req, res)=> {
     if (!user) {
       return res.status(500).json({error: "Users is not found"})
     }
-          // Password compare
+
+             // Password compare
 const isMatch = await bcrypt.compare(password, user.password);
 if (!isMatch) {
   return res.status(401).json({ error: "Invalid email or password" });
